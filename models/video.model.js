@@ -65,8 +65,22 @@ const videoSchema = new Schema({
     ref: "User"
   }],
   dislikeBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-  viewedBY: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }]
+  viewedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }]
 }, { timestamps: true })
+
+
+videoSchema.virtual("likes").get(function () {
+  return this.likeBy.length
+})
+videoSchema.virtual("dislike").get(function () {
+  return this.dislikeBy.length;
+})
+videoSchema.virtual("views").get(function () {
+  return this.viewedBy.length
+})
+
+videoSchema.set('toJSON', { virtuals: true });
+videoSchema.set('toObject', { virtuals: true });
 
 const videoModel = model("Video", videoSchema);
 
